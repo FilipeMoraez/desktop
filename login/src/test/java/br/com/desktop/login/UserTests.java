@@ -20,7 +20,7 @@ class UserTests {
 
 
 	@Test()
-	void testeUser() {
+	void testUser() {
 		saveUserFilipe();
 		listUser();
 		updateUser();
