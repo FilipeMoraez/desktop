@@ -1,9 +1,11 @@
 package br.com.desktop.login.controller;
 
 import br.com.desktop.login.dto.ResponseErrorDTO;
+import br.com.desktop.login.dto.UserAuthorityDTO;
 import br.com.desktop.login.exception.BussinessException;
 import br.com.desktop.login.model.Authority;
 import br.com.desktop.login.service.AuthorityService;
+import br.com.desktop.login.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -18,9 +20,11 @@ import java.util.List;
 public class AuthorityController {
     
     private AuthorityService authorityService;
+    private UserService userService;
     
-    public AuthorityController(AuthorityService authorityService){
+    public AuthorityController(AuthorityService authorityService, UserService userService){
         this.authorityService = authorityService;
+        this.userService = userService;
     }
 
     @ApiOperation("Recuperar todas as Authoritys")
@@ -73,6 +77,17 @@ public class AuthorityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAuthority(@PathVariable("id") Long id) throws BussinessException {
         authorityService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation("Atrelar Authority a Usuário")
+    @ApiResponses(value=
+            {@ApiResponse(code = 200, message = "Sucesso"),
+                    @ApiResponse(code = 400, message = "Error", response = ResponseErrorDTO.class)}
+    )
+    @PostMapping("user")
+    public ResponseEntity<?> userAndAuthorty(@RequestBody UserAuthorityDTO userAuthority) throws BussinessException {
+        userService.saveAuthorityUser(userAuthority);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     

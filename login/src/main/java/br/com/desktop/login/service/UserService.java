@@ -6,7 +6,6 @@ import br.com.desktop.login.dto.UserAuthorityDTO;
 import br.com.desktop.login.exception.BussinessException;
 import br.com.desktop.login.model.Authority;
 import br.com.desktop.login.model.User;
-import br.com.desktop.login.repository.AuthorityRepository;
 import br.com.desktop.login.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
