@@ -1,8 +1,7 @@
 package br.com.desktop.login.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,7 +14,7 @@ public class User extends Logged{
     @Column(name="ID_USER")
     private Long id;
 
-    @Column(name="USERNAME", nullable = false)
+    @Column(name="USERNAME", nullable = false, unique = true)
     private String username;
 
     @Column(name="PASSWORD", nullable = false)
@@ -27,10 +26,13 @@ public class User extends Logged{
     @Column(name="EMAIL", nullable = false)
     private String email;
 
+    @Transient
+    private String authorityName;
+
     @ApiModelProperty(hidden = true)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="ID_AUTHORITY")
-    @JsonBackReference
+    @JoinColumn(name="ID_AUTHORITY", nullable = false)
+    @JsonIgnore
     private Authority authority;
 
     public Long getId() {
@@ -79,5 +81,13 @@ public class User extends Logged{
 
     public void setAuthority(Authority authority) {
         this.authority = authority;
+    }
+
+    public String getAuthorityName() {
+        return authorityName;
+    }
+
+    public void setAuthorityName(String authorityName) {
+        this.authorityName = authorityName;
     }
 }
