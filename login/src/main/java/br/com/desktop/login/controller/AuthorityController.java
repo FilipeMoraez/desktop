@@ -80,15 +80,5 @@ public class AuthorityController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation("Atrelar Authority a Usuário")
-    @ApiResponses(value=
-            {@ApiResponse(code = 200, message = "Sucesso"),
-                    @ApiResponse(code = 400, message = "Error", response = ResponseErrorDTO.class)}
-    )
-    @PostMapping("user")
-    public ResponseEntity<?> userAndAuthorty(@RequestBody UserAuthorityDTO userAuthority) throws BussinessException {
-        userService.saveAuthorityUser(userAuthority);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    
+
 }

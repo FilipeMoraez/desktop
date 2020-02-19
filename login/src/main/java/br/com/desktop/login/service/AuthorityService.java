@@ -27,6 +27,10 @@ public class AuthorityService implements AbstractService<Authority> {
         return authorityRepository.findById(id).orElseThrow(()-> new BussinessException(AUTHORITY_NOT_FOUND));
     }
 
+    public Authority findByName(String name) throws BussinessException{
+        return authorityRepository.findByName(name).orElseThrow(()-> new BussinessException(AUTHORITY_NOT_FOUND));
+    }
+
     @Override
     public void save(Authority s) throws BussinessException {
         s.setId(null);

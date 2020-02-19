@@ -1,12 +1,12 @@
 package br.com.desktop.login.controller;
 
 import br.com.desktop.login.dto.ResponseErrorDTO;
-import br.com.desktop.login.dto.UserAuthorityDTO;
 import br.com.desktop.login.exception.BussinessException;
 import br.com.desktop.login.model.User;
 import br.com.desktop.login.service.UserService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +28,7 @@ public class UserController {
             {@ApiResponse(code = 200, message = "Sucesso", response = User.class),
                     @ApiResponse(code = 400, message = "Error", response = ResponseErrorDTO.class)}
     )
+
     @GetMapping()
     public List<User> getAllUsers(){
         return service.findAll();

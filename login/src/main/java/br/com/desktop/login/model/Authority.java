@@ -20,7 +20,7 @@ public class Authority extends Logged{
     @Column(name="NAME", nullable = false)
     private String name;
 
-
+    @JsonIgnore
     @ApiModelProperty(hidden = true)
     @OneToMany(
             mappedBy = "authority",
@@ -31,19 +31,24 @@ public class Authority extends Logged{
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<User> users = new ArrayList<>();
 
+
     @ApiModelProperty(hidden = true)
     @ManyToMany
     @JoinTable(
             name = "AUTHORITY_ROLE",
             joinColumns = @JoinColumn(name = "AUTHORITY_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-    @JsonManagedReference
     private List<Role> roles = new ArrayList<>();
 
+    public void addRole(Role r){
+        this.roles.add(r);
+    }
 
+    public void removeRole(Role r){
+        this.roles.remove(r);
+    }
 
     // Getters and Setters...
-
 
     public List<User> getUsers() {
         return users;

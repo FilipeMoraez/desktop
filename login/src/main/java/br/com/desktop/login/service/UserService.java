@@ -2,9 +2,7 @@ package br.com.desktop.login.service;
 
 import static br.com.desktop.login.contants.ErrorMesage.*;
 
-import br.com.desktop.login.dto.UserAuthorityDTO;
 import br.com.desktop.login.exception.BussinessException;
-import br.com.desktop.login.model.Authority;
 import br.com.desktop.login.model.User;
 import br.com.desktop.login.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,9 @@ public class UserService implements AbstractService<User>{
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        users.stream().forEach(e -> e.setAuthorityName(e.getAuthority().getName()));
+        return users;
     }
     @Override
     public User findById(Long id) throws BussinessException{
@@ -35,12 +35,14 @@ public class UserService implements AbstractService<User>{
         s.setId(null);
         this.valid(s);
         logged(s, s.getId());
+        s.setAuthority(authorityService.findByName(s.getAuthorityName()));
         userRepository.save(s);
     }
     @Override
     public void update(User s) throws BussinessException {
         this.validUpdate(s);
         this.logged(s, s.getId());
+        s.setAuthority(authorityService.findByName(s.getAuthorityName()));
         userRepository.save(s);
     }
     @Override
@@ -71,12 +73,9 @@ public class UserService implements AbstractService<User>{
 
         if(s.getBirthDate() == null)
             throw new BussinessException(USER_BIRTHDAY);
+        if(s.getAuthorityName() == null || s.getAuthorityName().isEmpty()){
+            throw new BussinessException(USER_WITHOUT_AUTHORITY);
+        }
     }
 
-    public void saveAuthorityUser(UserAuthorityDTO userAuthority) throws BussinessException {
-        User s = findById(userAuthority.getUser());
-        Authority a = authorityService.findById(userAuthority.getAuthority());
-        s.setAuthority(a);
-        userRepository.save(s);
-    }
 }

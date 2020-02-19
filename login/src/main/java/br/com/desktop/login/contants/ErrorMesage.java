@@ -9,6 +9,7 @@ public enum ErrorMesage {
     USER_EMAIL_NOT_VALID("Email digitado inválido!"),
     USER_BIRTHDAY("Data de nascimento inválida!"),
     USER_NOT_FOUND("Usuário não encontrado!"),
+    USER_WITHOUT_AUTHORITY("Usuário não pode ser salvo sem uma autoridade"),
 
     // Role Errors
     ROLE_NOT_FOUND("Role não encontrada"),

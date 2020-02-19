@@ -2,21 +2,20 @@ package br.com.desktop.login;
 
 import br.com.desktop.login.exception.BussinessException;
 import br.com.desktop.login.model.Role;
-import br.com.desktop.login.model.User;
 import br.com.desktop.login.service.RoleService;
-import br.com.desktop.login.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 class RoleTests {
 
-
+	private Logger logger = LoggerFactory.getLogger(RoleTests.class);
+	
 	@Autowired
 	private RoleService service;
 
@@ -73,7 +72,7 @@ class RoleTests {
 			service.save(r);
 			throw new RuntimeException("Validação de nome nullo não está funcionando");
 		}catch(BussinessException e){
-			System.out.println("Teste nome nulo validado com sucessso!");
+			logger.info("Teste nome nulo validado com sucessso!");
 			r.setName("ADMIN");
 		}
 	}

@@ -4,20 +4,25 @@ import br.com.desktop.login.exception.BussinessException;
 import br.com.desktop.login.model.User;
 import br.com.desktop.login.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
+@Sql("classpath:initUserTest.sql")
 class UserTests {
+	
+	private Logger logger = LoggerFactory.getLogger(UserTests.class);
 
 	private final String ERR = "test";
 	@Autowired
 	private UserService service;
-
 
 	@Test()
 	void testUser() {
@@ -31,7 +36,7 @@ class UserTests {
 		try{
 			service.deleteById(1l);
 		}catch(BussinessException e){
-			System.out.println("Delete do usuário não está funcionando.");
+			logger.info("Delete do usuário não está funcionando.");
 		}
 	}
 
@@ -47,18 +52,16 @@ class UserTests {
 			s.setCreate(new Date());
 			s.setModify(new Date());
 			service.update(s);
-			System.out.println("Data de modificacao : " + s.getModify());
+			logger.info("Data de modificacao : " + s.getModify());
 		}catch(BussinessException e){
-			System.out.println("Update do usuário não está funcionando.");
+			logger.info("Update do usuário não está funcionando.");
 		}
 	}
 
 
 	private void listUser() {
 		try{
-			saveUser("MatheusJosias");
-			saveUser("JoséMatias");
-			saveUser("MathiasJoao");
+
 			User u = service.findById(1l);
 			List<User> lista = service.findAll();
 			if(lista.size()<4 && u != null & u.getId() == 1l){
@@ -69,20 +72,6 @@ class UserTests {
 		}
 	}
 
-	private void saveUser(String name){
-		try{
-			User s = new User();
-			s.setUsername(name);
-			s.setEmail("fiipe_Antique@hotmail.com");
-			s.setBirthDate(new Date());
-			s.setPassword( "123456");
-			s.setCreate(new Date());
-			s.setModify(new Date());
-			service.save(s);
-		}catch(BussinessException e){
-			throw new RuntimeException("Cadastrar novo usuário não funcionando corretamente ou busca por 1 não funcionando corretamente");
-		}
-	}
 	private void saveUserFilipe(){
 		User s = new User();
 		s.setUsername("Filipe_moraes");
@@ -91,6 +80,7 @@ class UserTests {
 		s.setPassword( "123456");
 		s.setCreate(new Date());
 		s.setModify(new Date());
+		s.setAuthorityName("ADMIN");
 
 		validaNome(s);
 		validaEmail(s);
@@ -99,9 +89,9 @@ class UserTests {
 		validaDataNasc(s);
 		try{
 			service.save(s);
-			System.out.println("Data de criação: " + s.getCreate());
+			logger.info("Data de criação: " + s.getCreate());
 		}catch(BussinessException e){
-			throw new RuntimeException("Cadastrar novo usuário não funcionando corretamente ou busca por 1 não funcionando corretamente");
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -113,7 +103,7 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de nome não está funcionando");
 		}catch(Exception e){
-			System.out.println("Nome validado com sucesso");
+			logger.info("Nome validado com sucesso");
 		}
 
 		s.setUsername(null);
@@ -121,9 +111,9 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de nome não está funcionando");
 		}catch(DataIntegrityViolationException e){
-			throw new RuntimeException("Validação de nome null não está funcionando");
+			throw new RuntimeException(e);
 		}catch(Exception e){
-			System.out.println("Nome nulo validado com sucesso");
+			logger.info("Nome nulo validado com sucesso");
 			s.setUsername("Filipe_Moraes");
 		}
 	}
@@ -133,7 +123,7 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de email não está funcionando");
 		}catch(BussinessException e){
-			System.out.println("Email validado com sucesso");
+			logger.info("Email validado com sucesso");
 			s.setEmail("fiipe_antique@hotmail.com");
 		}
 	}
@@ -143,7 +133,7 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de senha não está funcionando");
 		}catch(BussinessException e){
-			System.out.println("Senha validado com sucesso");
+			logger.info("Senha validado com sucesso");
 		}
 
 		s.setPassword(null);
@@ -151,9 +141,9 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de senha não está funcionando");
 		}catch(DataIntegrityViolationException e){
-			throw new RuntimeException("Validação de senha null não está funcionando");
+			throw new RuntimeException(e);
 		}catch(BussinessException e){
-			System.out.println("Senha nula validado com sucesso");
+			logger.info("Senha nula validado com sucesso");
 			s.setPassword("TestePassword");
 		}
 	}
@@ -165,7 +155,7 @@ class UserTests {
 		}catch(DataIntegrityViolationException e){
 			throw new RuntimeException("Validação de email null não está funcionando");
 		}catch(BussinessException e){
-			System.out.println("Email vazio validado com sucesso");
+			logger.info("Email vazio validado com sucesso");
 			s.setEmail("filipe_antique@hotmail.com");
 		}
 	}
@@ -176,7 +166,7 @@ class UserTests {
 			service.save(s);
 			throw new RuntimeException("Validação de data nascimento não está funcionando");
 		}catch(BussinessException  e){
-			System.out.println("Data nascimento validado com sucesso");
+			logger.info("Data nascimento validado com sucesso");
 			s.setBirthDate(new Date());
 		}
 	}
