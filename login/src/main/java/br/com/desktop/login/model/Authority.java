@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Entity(name="Authority")
 @Table(name="AUTHORITY")
+@Getter
+@Setter
 public class Authority extends Logged{
 
     @Id
@@ -38,6 +42,7 @@ public class Authority extends Logged{
             name = "AUTHORITY_ROLE",
             joinColumns = @JoinColumn(name = "AUTHORITY_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+
     private List<Role> roles = new ArrayList<>();
 
     public void addRole(Role r){
@@ -48,37 +53,4 @@ public class Authority extends Logged{
         this.roles.remove(r);
     }
 
-    // Getters and Setters...
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
 }

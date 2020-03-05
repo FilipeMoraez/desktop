@@ -14,11 +14,11 @@ public interface AbstractService<T extends Logged> {
     void save(T s) throws BussinessException;
     void update(T s) throws BussinessException;
     void deleteById(Long id) throws BussinessException;
+    void validUpdate(T s) throws BussinessException;
+    void valid(T s) throws BussinessException;
     default void logged(T s, Long id) throws BussinessException {
         Date create = null;
         if(id != null) create = findById(id).getCreate();
         s.createLogged(create);
     }
-    void validUpdate(T s) throws BussinessException;
-    void valid(T s) throws BussinessException;
 }
